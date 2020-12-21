@@ -86,6 +86,83 @@ const List: React.FC = () => {
                     subtitle = "21/12/2020"
                     amount = "R$ 200,00"
                 />
+                <HistoryFinanceCard
+                    cardColor = "#313862"
+                    tagColor = "#E44C4E"
+                    title = "Conta de Luz"
+                    subtitle = "21/12/2020"
+                    amount = "R$ 200,00"
+                />
+                <HistoryFinanceCard
+                    cardColor = "#313862"
+                    tagColor = "#E44C4E"
+                    title = "Conta de Luz"
+                    subtitle = "21/12/2020"
+                    amount = "R$ 200,00"
+                />
+                <HistoryFinanceCard
+                    cardColor = "#313862"
+                    tagColor = "#E44C4E"
+                    title = "Conta de Luz"
+                    subtitle = "21/12/2020"
+                    amount = "R$ 200,00"
+                />
+                <HistoryFinanceCard
+                    cardColor = "#313862"
+                    tagColor = "#E44C4E"
+                    title = "Conta de Luz"
+                    subtitle = "21/12/2020"
+                    amount = "R$ 200,00"
+                />
+                <HistoryFinanceCard
+                    cardColor = "#313862"
+                    tagColor = "#E44C4E"
+                    title = "Conta de Luz"
+                    subtitle = "21/12/2020"
+                    amount = "R$ 200,00"
+                />
+                <HistoryFinanceCard
+                    cardColor = "#313862"
+                    tagColor = "#E44C4E"
+                    title = "Conta de Luz"
+                    subtitle = "21/12/2020"
+                    amount = "R$ 200,00"
+                />
+                <HistoryFinanceCard
+                    cardColor = "#313862"
+                    tagColor = "#E44C4E"
+                    title = "Conta de Luz"
+                    subtitle = "21/12/2020"
+                    amount = "R$ 200,00"
+                />
+                <HistoryFinanceCard
+                    cardColor = "#313862"
+                    tagColor = "#E44C4E"
+                    title = "Conta de Luz"
+                    subtitle = "21/12/2020"
+                    amount = "R$ 200,00"
+                />
+                <HistoryFinanceCard
+                    cardColor = "#313862"
+                    tagColor = "#E44C4E"
+                    title = "Conta de Luz"
+                    subtitle = "21/12/2020"
+                    amount = "R$ 200,00"
+                />
+                <HistoryFinanceCard
+                    cardColor = "#313862"
+                    tagColor = "#E44C4E"
+                    title = "Conta de Luz"
+                    subtitle = "21/12/2020"
+                    amount = "R$ 200,00"
+                />
+                <HistoryFinanceCard
+                    cardColor = "#313862"
+                    tagColor = "#E44C4E"
+                    title = "Conta de Luz"
+                    subtitle = "21/12/2020"
+                    amount = "R$ 200,00"
+                />
             </Content>
         </Container>
     );
