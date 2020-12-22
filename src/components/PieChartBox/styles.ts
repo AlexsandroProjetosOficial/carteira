@@ -49,7 +49,7 @@ export const Legend = styled.li<ILegendProps>`
 
     > div {
         background-color: ${props => props.color};
-        width: 40px;
+        width: 60px;
         height: 40px;
         border-radius: 5px;
         font-size: 18px;
