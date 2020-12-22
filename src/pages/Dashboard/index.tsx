@@ -3,7 +3,7 @@ import ContentHeader from '../../components/ContentHeader';
 import SelectInput from '../../components/SelectInput';
 import WalletBox from '../../components/WalletBox';
 import MessageBox from '../../components/MessageBox';
-import PieChart from '../../components/PieChart';
+import PieChartBox from '../../components/PieChartBox';
 import gains from '../../repositories/gains';
 import expenses from '../../repositories/expenses';
 import listOfMonths from '../../utils/months';
@@ -115,6 +115,28 @@ const Dashboard: React.FC = () => {
         }
     }, [totalBlance]);
 
+    const relationExpensesVersusGains = useMemo(() => {
+        const total = totalGains + totalExpenses;
+        const percentGains = (totalGains / total) * 100;
+        const percentExpenses = (totalExpenses / total) * 100;
+        const data = [
+            {
+                name: "Entradas",
+                value: totalGains,
+                percent: isNaN(Number(percentGains.toFixed(1))) ? 0 : Number(percentGains.toFixed(1)),
+                color: "#E44C4E"
+            },
+            {
+                name: "Saídas",
+                value: totalExpenses,
+                percent: isNaN(Number(percentExpenses.toFixed(1))) ? 0 : Number(percentExpenses.toFixed(1)),
+                color: "#F7931B"
+            },
+        ];
+
+        return data;
+    },[totalGains, totalExpenses]);
+
     const handleMonthSelected = (month: string) => {
         try {
             const parseMonth = Number(month);
@@ -179,7 +201,7 @@ const Dashboard: React.FC = () => {
                     footerText={message.footerText}
                 />
 
-                <PieChart />
+                <PieChartBox data={relationExpensesVersusGains} />
             </Content>
         </Container>
     );
