@@ -8,7 +8,8 @@ import expenses from '../../repositories/expenses';
 import listOfMonths from '../../utils/months';
 import happyImg from '../../assets/happy.svg';
 import sadImg from '../../assets/sad.svg';
-import { 
+import grinningImg from '../../assets/grinning.svg';
+import {
     Container,
     Content,
 } from './styles';
@@ -45,12 +46,79 @@ const Dashboard: React.FC = () => {
             }
         })
     }, []);
-    
+
+    const totalExpenses = useMemo(() => {
+        let total: number = 0;
+        expenses.forEach(element => {
+            const date = new Date(element.date);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+
+            if (month === monthSelected && year === yearSelected) {
+                try {
+                    total += Number(element.amount);
+                } catch {
+                    throw new Error('Invalid amount! Amount must be number')
+                }
+            }
+        });
+
+        return total;
+    }, [monthSelected, yearSelected]);
+
+    const totalGains = useMemo(() => {
+        let total: number = 0;
+        gains.forEach(element => {
+            const date = new Date(element.date);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+
+            if (month === monthSelected && year === yearSelected) {
+                try {
+                    total += Number(element.amount);
+                } catch {
+                    throw new Error('Invalid amount! Amount must be number')
+                }
+            }
+        });
+
+        return total;
+    }, [monthSelected, yearSelected]);
+
+    const totalBlance = useMemo(() => {
+        return totalGains - totalExpenses;
+    }, [totalExpenses, totalGains]);
+
+    const message = useMemo(() => {
+        if (totalBlance < 0) {
+            return {
+                title: "Que triste!",
+                icon: sadImg,
+                description: "Neste mês, você gastou mais do que deveria.",
+                footerText: "Verifique seus gastos e tente cortar algumas coisas desnecessárias."
+            }
+        } else if(totalBlance === 0) {
+            return {
+                title: "Ufaa!",
+                icon: grinningImg,
+                description: "Neste mês, você gastou exatamente o que ganhou.",
+                footerText: "Tenha cuidado. No próximo tente poupar o seu dinheiro."
+            }
+        } else {
+            return {
+                title: "Muito bem!",
+                icon: happyImg,
+                description: "Sua carteira está positiva!",
+                footerText: "Continue assim. Considere investir o seu saldo."
+            }
+        }
+    }, [totalBlance]);
+
     const handleMonthSelected = (month: string) => {
         try {
             const parseMonth = Number(month);
             setMonthSelected(parseMonth);
-        } catch (error) {
+        } catch {
             throw new Error('Invalid month value. Is accept 0 - 24.');
         }
     }
@@ -59,7 +127,7 @@ const Dashboard: React.FC = () => {
         try {
             const parseYear = Number(year);
             setYearSelected(parseYear);
-        } catch (error) {
+        } catch {
             throw new Error('Invalid year value. Is accept integer numbers.');
         }
     }
@@ -80,34 +148,34 @@ const Dashboard: React.FC = () => {
             </ContentHeader>
             <Content>
                 <WalletBox
-                    title = "saldo"
-                    amount = {150.00}
-                    footerlabel = "atualizado com base nas entradas e saídas"
-                    icon = "dolar"
-                    color = "#4E41F0"
+                    title="saldo"
+                    amount={totalBlance}
+                    footerlabel="atualizado com base nas entradas e saídas"
+                    icon="dolar"
+                    color="#4E41F0"
                 />
 
                 <WalletBox
-                    title = "entradas"
-                    amount = {5000.00}
-                    footerlabel = "atualizado com base nas entradas e saídas"
-                    icon = "arrowUp"
-                    color = "#F7931B"
+                    title="entradas"
+                    amount={totalGains}
+                    footerlabel="atualizado com base nas entradas e saídas"
+                    icon="arrowUp"
+                    color="#F7931B"
                 />
 
                 <WalletBox
-                    title = "saídas"
-                    amount = {4850.00}
-                    footerlabel = "atualizado com base nas entradas e saídas"
-                    icon = "arrowDown"
-                    color = "#E44c4E"
+                    title="saídas"
+                    amount={totalExpenses}
+                    footerlabel="atualizado com base nas entradas e saídas"
+                    icon="arrowDown"
+                    color="#E44c4E"
                 />
 
-                <MessageBox 
-                    title = "Muito bem!"
-                    icon = {happyImg}
-                    description = "Sua carteira está positiva!"
-                    footerText = "Continue assim. Considere investir o seu saldo."
+                <MessageBox
+                    title= {message.title}
+                    icon={message.icon}
+                    description={message.description}
+                    footerText={message.footerText}
                 />
             </Content>
         </Container>
