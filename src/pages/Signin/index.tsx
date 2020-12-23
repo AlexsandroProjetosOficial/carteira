@@ -1,5 +1,6 @@
 import React from 'react';
 import logoImg from '../../assets/logo.svg';
+import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { 
     Container,
@@ -28,7 +29,7 @@ const SignIn: React.FC = () => {
                     placeholder="Senha"
 
                 />
-                <button type="submit">Acessar</button>
+                <Button type="submit">Acessar</Button>
             </Form>
         </Container>
     );
