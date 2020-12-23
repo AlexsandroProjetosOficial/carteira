@@ -27,7 +27,7 @@ export const MenuContainer = styled.nav`
     display: flex;
     flex-direction: column;
     margin-top: 50px;
-    margin-left: 20px
+    margin-left: 20px;
 `;
 
 export const MenuItemLink = styled.a`
@@ -37,6 +37,27 @@ export const MenuItemLink = styled.a`
     text-decoration: none;
     transition: opacity .3s;
     margin: 10px 0;
+
+    &:hover {
+        opacity: .7;
+    }
+
+    > svg {
+        font-size: 20px;
+        margin-right: 5px;
+    }
+`;
+
+export const MenuItemButton = styled.button`
+    display: flex;
+    align-items: center;
+    color: ${props => props.theme.colors.info};
+    text-decoration: none;
+    transition: opacity .3s;
+    margin: 10px 0;
+    font-size: 16px;
+    border: none;
+    background: none;
 
     &:hover {
         opacity: .7;
