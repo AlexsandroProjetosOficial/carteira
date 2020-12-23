@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../hooks/auth';
 import logoImg from '../../assets/logo.svg';
 import { 
@@ -8,20 +8,31 @@ import {
     Title,
     MenuContainer,
     MenuItemLink,
-    MenuItemButton
+    MenuItemButton,
+    ToggleMenu
 } from './styles';
 import { 
     MdDashboard,
     MdArrowDownward,
     MdArrowUpward,
-    MdExitToApp
+    MdExitToApp,
+    MdClose,
+    MdMenu
 } from 'react-icons/md';
 const Aside: React.FC = () => {
     const { signOut } = useAuth();
+    const [toggleMenuIsOpened, setToggleMenuIsOpened] = useState(false);
+
+    const handleToggleMenu = () => {
+        setToggleMenuIsOpened(!toggleMenuIsOpened);
+    }
 
     return (
-        <Container menuIsOpen={true}>
+        <Container menuIsOpen={toggleMenuIsOpened}>
             <Header>
+                <ToggleMenu onClick={handleToggleMenu}>
+                    { toggleMenuIsOpened ? <MdClose /> : <MdMenu /> }
+                </ToggleMenu>
                 <LogoImg src={logoImg} alt="Logo Carteira" />
                 <Title>Carteira</Title>
             </Header>
