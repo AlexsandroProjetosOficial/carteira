@@ -13,8 +13,6 @@ export const Container = styled.div`
     border-radius: 7px;
     margin: 10px 0;
     padding: 30px 20px;
-
-    
 `;
 
 export const ChartContainer = styled.div`
@@ -43,7 +41,7 @@ export const Legend = styled.li<ILegendProps>`
     display: flex;
     align-items: center;
     margin-bottom: 7px;
-    margin-left: 7px;
+    margin-left: 20px;
 
     > div {
         background-color: ${props => props.color};

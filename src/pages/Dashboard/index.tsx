@@ -10,6 +10,7 @@ import listOfMonths from '../../utils/months';
 import happyImg from '../../assets/happy.svg';
 import sadImg from '../../assets/sad.svg';
 import grinningImg from '../../assets/grinning.svg';
+import opsImg from '../../assets/ops.svg';
 import {
     Container,
     Content,
@@ -100,6 +101,13 @@ const Dashboard: React.FC = () => {
                 description: "Neste mês, você gastou mais do que deveria.",
                 footerText: "Verifique seus gastos e tente cortar algumas coisas desnecessárias."
             }
+        } else if (totalGains === 0 && totalExpenses === 0) {
+            return {
+                title: "Op's!",
+                icon: opsImg,
+                description: "Neste mês, não há registros de entradas e saídas.",
+                footerText: "Parece que você não fez nenhum registro no mês e ano selecionado."
+            }
         } else if (totalBlance === 0) {
             return {
                 title: "Ufaa!",
@@ -115,24 +123,25 @@ const Dashboard: React.FC = () => {
                 footerText: "Continue assim. Considere investir o seu saldo."
             }
         }
-    }, [totalBlance]);
+    }, [totalBlance, totalGains, totalExpenses]);
 
     const relationExpensesVersusGains = useMemo(() => {
         const total = totalGains + totalExpenses;
-        const percentGains = (totalGains / total) * 100;
-        const percentExpenses = (totalExpenses / total) * 100;
+        const percentGains = Number(((totalGains / total) * 100).toFixed(1));
+        const percentExpenses = Number(((totalExpenses / total) * 100).toFixed(1));
+
         const data = [
             {
                 name: "Entradas",
                 value: totalGains,
-                percent: isNaN(Number(percentGains.toFixed(1))) ? 0 : Number(percentGains.toFixed(1)),
-                color: "#E44C4E"
+                percent: percentGains ? percentGains : 0,
+                color: "#F7931B"
             },
             {
                 name: "Saídas",
                 value: totalExpenses,
-                percent: isNaN(Number(percentExpenses.toFixed(1))) ? 0 : Number(percentExpenses.toFixed(1)),
-                color: "#F7931B"
+                percent: percentExpenses ? percentExpenses : 0,
+                color: "#E44C4E"
             },
         ];
 
@@ -141,54 +150,52 @@ const Dashboard: React.FC = () => {
 
     const historyData = useMemo(() => {
         return listOfMonths
-            .map((_, month) => {
+        .map((_, month) => {
+            
+            let amountEntry = 0;
+            gains.forEach(gain => {
+                const date = new Date(gain.date);
+                const gainMonth = date.getMonth();
+                const gainYear = date.getFullYear();
 
-                let amountEntry = 0;
-                gains.forEach(gain => {
-                    const date = new Date(gain.date);
-                    const gainMonth = date.getMonth();
-                    const gainYear = date.getFullYear();
-
-                    if (gainMonth === month && gainYear === yearSelected) {
-                        try {
-                            amountEntry += Number(gain.amount);
-                        } catch {
-                            throw new Error('amountEntry is invalid. amountEntry must be valid number.')
-                        }
+                if(gainMonth === month && gainYear === yearSelected){
+                    try{
+                        amountEntry += Number(gain.amount);
+                    }catch{
+                        throw new Error('amountEntry is invalid. amountEntry must be valid number.')
                     }
-                });
-
-                let amountOutput = 0;
-                expenses.forEach(expense => {
-                    const date = new Date(expense.date);
-                    const expenseMonth = date.getMonth();
-                    const expenseYear = date.getFullYear();
-
-                    if (expenseMonth === month && expenseYear === yearSelected) {
-                        try {
-                            amountOutput += Number(expense.amount);
-                        } catch {
-                            throw new Error('amountOutput is invalid. amountOutput must be valid number.')
-                        }
-                    }
-                });
-
-
-                return {
-                    monthNumber: month,
-                    month: listOfMonths[month].substr(0, 3),
-                    amountEntry,
-                    amountOutput
                 }
-            })
-            .filter(item => {
-                const currentMonth = new Date().getMonth();
-                const currentYear = new Date().getFullYear();
-                return (yearSelected === currentYear && item.monthNumber <= currentMonth) || (yearSelected < currentYear)
             });
-    }, [yearSelected]);
 
-    console.log(historyData);
+            let amountOutput = 0;
+            expenses.forEach(expense => {
+                const date = new Date(expense.date);
+                const expenseMonth = date.getMonth();
+                const expenseYear = date.getFullYear();
+
+                if(expenseMonth === month && expenseYear === yearSelected){
+                    try{
+                        amountOutput += Number(expense.amount);
+                    }catch{
+                        throw new Error('amountOutput is invalid. amountOutput must be valid number.')
+                    }
+                }
+            });
+
+
+            return {
+                monthNumber: month,
+                month: listOfMonths[month].substr(0, 3),
+                amountEntry,
+                amountOutput
+            }
+        })
+        .filter(item => {
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            return (yearSelected === currentYear && item.monthNumber <= currentMonth) || (yearSelected < currentYear)
+        });
+    },[yearSelected]);
 
     const relationExpensesRecurrentVersusEventual = useMemo(() => {
         let amountRecurrent = 0;
@@ -211,18 +218,20 @@ const Dashboard: React.FC = () => {
         });
 
         const total = amountRecurrent + amountEventual;
+        const percentRecurrent = Number(((amountRecurrent / total) * 100).toFixed(1));
+        const percentEventual = Number(((amountEventual / total) * 100).toFixed(1));
 
         const data = [
             {
                 name: 'Recorrentes',
                 amount: amountRecurrent,
-                percent: isNaN(Number(((amountEventual / total) * 100).toFixed(1))) ? 0 : Number(((amountEventual / total) * 100).toFixed(1)),
+                percent: percentRecurrent ? percentRecurrent : 0,
                 color: "#F7931B"
             },
             {
                 name: 'Eventuais',
                 amount: amountEventual,
-                percent: isNaN(Number(((amountEventual / total) * 100).toFixed(1))) ? 0 : Number(((amountEventual / total) * 100).toFixed(1)),
+                percent: percentEventual ? percentEventual : 0,
                 color: "#E44C4E"
             }
         ];
@@ -251,18 +260,20 @@ const Dashboard: React.FC = () => {
         });
 
         const total = amountRecurrent + amountEventual;
+        const percentRecurrent = Number(((amountRecurrent / total) * 100).toFixed(1));
+        const percentEventual = Number(((amountEventual / total) * 100).toFixed(1));
 
         const data = [
             {
                 name: 'Recorrentes',
                 amount: amountRecurrent,
-                percent: isNaN(Number(((amountEventual / total) * 100).toFixed(1))) ? 0 : Number(((amountEventual / total) * 100).toFixed(1)),
+                percent: percentRecurrent ? percentRecurrent : 0,
                 color: "#F7931B"
             },
             {
                 name: 'Eventuais',
                 amount: amountEventual,
-                percent: isNaN(Number(((amountEventual / total) * 100).toFixed(1))) ? 0 : Number(((amountEventual / total) * 100).toFixed(1)),
+                percent: percentEventual ? percentEventual : 0,
                 color: "#E44C4E"
             }
         ];
@@ -335,10 +346,10 @@ const Dashboard: React.FC = () => {
                 />
 
                 <PieChartBox data={relationExpensesVersusGains} />
-                <HistoryBox
-                    data={historyData}
+                <HistoryBox 
+                    data={historyData} 
                     lineColorAmountEntry="#F7931B"
-                    lineColorAmountOutput="#E44c4E"
+                    lineColorAmountOutput="#E44C4E"
                 />
                 <BarChartBox
                     data={relationExpensesRecurrentVersusEventual}
