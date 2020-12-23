@@ -39,9 +39,9 @@ const WalletBox: React.FC<IWalletBoxProps> = ({
         <Container color={color}>
             <span>{title}</span>
             <h1>
+                <strong>R$ </strong>
                 <CountUp 
                     end = {amount} // Número para parar bibliote encerrar.
-                    prefix = {"R$ "} // Coloca o sifrão da moeda BR.
                     separator = "." // Separador de milhar.
                     decimal = "," // Separador de casas decimais.
                     decimals = {2} // Informa quantas casas decimais vai ter.
