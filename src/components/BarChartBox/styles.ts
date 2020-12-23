@@ -12,6 +12,13 @@ export const Container = styled.div`
     color: ${props => props.theme.colors.white};
     margin: 10px 0;
     border-radius: 7px;
+
+    @media(max-width: 1200px) {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+    }
 `;
 
 export const SideLeft = styled.aside`
@@ -21,6 +28,12 @@ export const SideLeft = styled.aside`
     > h2 {
         padding-left: 20px;
         margin-bottom: 10px;
+    }
+
+    @media(max-width: 420px) {
+        > h2 {
+            padding-left: 7px;
+        }
     }
 `;
 
@@ -50,6 +63,11 @@ export const LegendContainer = styled.ul`
     ::-webkit-scrollbar-track {
         background-color: ${props => props.theme.colors.tertiary};
     }
+
+    @media(max-width: 1200px) {
+        display: flex;
+        height: auto;
+    }
 `;
 
 export const Legend = styled.li<ILegendProps>`
@@ -70,5 +88,18 @@ export const Legend = styled.li<ILegendProps>`
 
     > span {
         margin-left: 5px;
+    }
+
+    @media(max-width: 1200px) {
+        > div {
+            width: 50px;
+            height: 30px;
+            font-size: 12px;
+            line-height: 30px;
+        }
+    }
+
+    @media(max-width: 420px) {
+        padding-left: 7px;
     }
 `;
