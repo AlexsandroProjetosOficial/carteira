@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import Toggle from '../Toggle'
 import { useAuth } from '../../hooks/auth';
+import { useTheme } from '../../hooks/theme';
 import logoImg from '../../assets/logo.svg';
 import { 
     Container,
@@ -9,7 +11,8 @@ import {
     MenuContainer,
     MenuItemLink,
     MenuItemButton,
-    ToggleMenu
+    ToggleMenu,
+    ThemeToggleFooter
 } from './styles';
 import { 
     MdDashboard,
@@ -19,16 +22,27 @@ import {
     MdClose,
     MdMenu
 } from 'react-icons/md';
+;
+
 const Aside: React.FC = () => {
     const { signOut } = useAuth();
+    const { toggleTheme, theme } = useTheme();
+
     const [toggleMenuIsOpened, setToggleMenuIsOpened] = useState(false);
+    const [darkTheme, setDarkTheme] = useState(() => theme.title === 'dark' ? true : false);
 
     const handleToggleMenu = () => {
         setToggleMenuIsOpened(!toggleMenuIsOpened);
     }
 
+    const handleChangeTheme = () => {
+        setDarkTheme(!darkTheme);
+        toggleTheme();
+    }
+
     return (
         <Container menuIsOpen={toggleMenuIsOpened}>
+
             <Header>
                 <ToggleMenu onClick={handleToggleMenu}>
                     { toggleMenuIsOpened ? <MdClose /> : <MdMenu /> }
@@ -36,6 +50,7 @@ const Aside: React.FC = () => {
                 <LogoImg src={logoImg} alt="Logo Carteira" />
                 <Title>Carteira</Title>
             </Header>
+
             <MenuContainer>
                 <MenuItemLink href="/"> 
                     <MdDashboard />
@@ -54,6 +69,15 @@ const Aside: React.FC = () => {
                     Sair 
                 </MenuItemButton>
             </MenuContainer>
+
+            <ThemeToggleFooter menuIsOpen={toggleMenuIsOpened}>
+                <Toggle 
+                    labelLeft = "Light"
+                    labelRight = "Dark"
+                    checked = {darkTheme}
+                    onChange = {handleChangeTheme}
+                />
+            </ThemeToggleFooter>
         </Container>
     );
 }
