@@ -1,8 +1,25 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 interface ILegendProps {
     color: string;
 }
+
+const animate = keyframes`
+    
+    0% {
+        transform: translateX(-150px);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: .5;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+`;
 
 export const Container = styled.div`
     display: flex;
@@ -13,6 +30,7 @@ export const Container = styled.div`
     border-radius: 7px;
     margin: 10px 0;
     padding: 30px 20px;
+    animation: ${animate} .5s;
 `;
 
 export const ChartContainer = styled.div`
