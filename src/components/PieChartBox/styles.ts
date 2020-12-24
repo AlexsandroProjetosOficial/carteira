@@ -1,8 +1,25 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 interface ILegendProps {
     color: string;
 }
+
+const animate = keyframes`
+
+    0% {
+        transform: translateX(150px);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: .5;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+`;
 
 export const Container = styled.div`
     width: 48%;
@@ -12,6 +29,8 @@ export const Container = styled.div`
     color: ${props => props.theme.colors.white};
     border-radius: 7px;
     display: flex;
+
+    animation: ${animate} .5s;
 
     @media(max-width: 770px){
         display: flex;
