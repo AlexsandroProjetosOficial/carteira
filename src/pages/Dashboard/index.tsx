@@ -14,13 +14,18 @@ import opsImg from '../../assets/ops.svg';
 import {
     Container,
     Content,
+    ContentSaldoTotal
 } from './styles';
 import HistoryBox from '../../components/HistoryBox';
 import BarChartBox from '../../components/BarChartBox';
+import WalletBoxTotal from '../../components/WalletBoxTotal';
+import formatCurrency from '../../utils/formatCurrency';
 
 const Dashboard: React.FC = () => {
     const [monthSelected, setMonthSelected] = useState<number>(new Date().getMonth() + 1);
     const [yearSelected, setYearSelected] = useState<number>(new Date().getFullYear());
+    const limite = 1000.00; // Quando tiver o banco de dados criar um useState.
+    const saldoLimite = String(`Saldo + limite: R$ ${formatCurrency(limite)}`);
 
     const years = useMemo(() => {
         let uniqueYears: number[] = [];
@@ -89,6 +94,37 @@ const Dashboard: React.FC = () => {
         return total;
     }, [monthSelected, yearSelected]);
 
+    const totalGeral = useMemo(() => {
+        return listOfMonths.map((_, month) => {
+            let totalGainsGeral = 0;
+            let totalExpensesGeral = 0;
+
+            gains.forEach(gain => {
+                const date = new Date(gain.date);
+                const gainMonth = date.getMonth();
+                if (gainMonth === month) {
+                    totalGainsGeral += Number(gain.amount);
+                }
+            });
+
+            expenses.forEach(expense => {
+                const date = new Date(expense.date);
+                const expenseMonth = date.getMonth();
+                if (expenseMonth === month) {
+                    totalExpensesGeral += Number(expense.amount);
+                }
+            });
+
+            return totalGainsGeral - totalExpensesGeral;
+
+        }).reduce((total, numero) => total + numero, 0);
+    }, []);
+
+    const saldoDisponivelMaisLimite = useMemo(() => {
+        return totalGeral + limite;
+    },[totalGeral]);
+
+
     const totalBlance = useMemo(() => {
         return totalGains - totalExpenses;
     }, [totalExpenses, totalGains]);
@@ -150,52 +186,52 @@ const Dashboard: React.FC = () => {
 
     const historyData = useMemo(() => {
         return listOfMonths
-        .map((_, month) => {
-            
-            let amountEntry = 0;
-            gains.forEach(gain => {
-                const date = new Date(gain.date);
-                const gainMonth = date.getMonth();
-                const gainYear = date.getFullYear();
+            .map((_, month) => {
 
-                if(gainMonth === month && gainYear === yearSelected){
-                    try{
-                        amountEntry += Number(gain.amount);
-                    }catch{
-                        throw new Error('amountEntry is invalid. amountEntry must be valid number.')
+                let amountEntry = 0;
+                gains.forEach(gain => {
+                    const date = new Date(gain.date);
+                    const gainMonth = date.getMonth();
+                    const gainYear = date.getFullYear();
+
+                    if (gainMonth === month && gainYear === yearSelected) {
+                        try {
+                            amountEntry += Number(gain.amount);
+                        } catch {
+                            throw new Error('amountEntry is invalid. amountEntry must be valid number.')
+                        }
                     }
-                }
-            });
+                });
 
-            let amountOutput = 0;
-            expenses.forEach(expense => {
-                const date = new Date(expense.date);
-                const expenseMonth = date.getMonth();
-                const expenseYear = date.getFullYear();
+                let amountOutput = 0;
+                expenses.forEach(expense => {
+                    const date = new Date(expense.date);
+                    const expenseMonth = date.getMonth();
+                    const expenseYear = date.getFullYear();
 
-                if(expenseMonth === month && expenseYear === yearSelected){
-                    try{
-                        amountOutput += Number(expense.amount);
-                    }catch{
-                        throw new Error('amountOutput is invalid. amountOutput must be valid number.')
+                    if (expenseMonth === month && expenseYear === yearSelected) {
+                        try {
+                            amountOutput += Number(expense.amount);
+                        } catch {
+                            throw new Error('amountOutput is invalid. amountOutput must be valid number.')
+                        }
                     }
+                });
+
+
+                return {
+                    monthNumber: month,
+                    month: listOfMonths[month].substr(0, 3),
+                    amountEntry,
+                    amountOutput
                 }
+            })
+            .filter(item => {
+                const currentMonth = new Date().getMonth();
+                const currentYear = new Date().getFullYear();
+                return (yearSelected === currentYear && item.monthNumber <= currentMonth) || (yearSelected < currentYear) || (yearSelected > currentYear)
             });
-
-
-            return {
-                monthNumber: month,
-                month: listOfMonths[month].substr(0, 3),
-                amountEntry,
-                amountOutput
-            }
-        })
-        .filter(item => {
-            const currentMonth = new Date().getMonth();
-            const currentYear = new Date().getFullYear();
-            return (yearSelected === currentYear && item.monthNumber <= currentMonth) || (yearSelected < currentYear)
-        });
-    },[yearSelected]);
+    }, [yearSelected]);
 
     const relationExpensesRecurrentVersusEventual = useMemo(() => {
         let amountRecurrent = 0;
@@ -288,7 +324,7 @@ const Dashboard: React.FC = () => {
         } catch {
             throw new Error('Invalid month value. Is accept 0 - 24.');
         }
-    },[]);
+    }, []);
 
     const handleYearSelected = useCallback((year: string) => {
         try {
@@ -297,7 +333,7 @@ const Dashboard: React.FC = () => {
         } catch {
             throw new Error('Invalid year value. Is accept integer numbers.');
         }
-    },[]);
+    }, []);
 
     return (
         <Container>
@@ -313,6 +349,14 @@ const Dashboard: React.FC = () => {
                     onChange={(e) => handleYearSelected(e.target.value)}
                 />
             </ContentHeader>
+            <ContentSaldoTotal>
+                <WalletBoxTotal
+                    title="Saldo Disponível"
+                    amount={saldoDisponivelMaisLimite}
+                    footerlabel={saldoLimite}
+                    color="#41f05e"
+                />
+            </ContentSaldoTotal>
             <Content>
                 <WalletBox
                     title="saldo"
@@ -346,8 +390,8 @@ const Dashboard: React.FC = () => {
                 />
 
                 <PieChartBox data={relationExpensesVersusGains} />
-                <HistoryBox 
-                    data={historyData} 
+                <HistoryBox
+                    data={historyData}
                     lineColorAmountEntry="#F7931B"
                     lineColorAmountOutput="#E44C4E"
                 />

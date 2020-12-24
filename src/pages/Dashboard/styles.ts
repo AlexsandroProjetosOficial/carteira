@@ -6,3 +6,8 @@ export const Content = styled.div`
     justify-content: space-between;
     flex-wrap: wrap;
 `;
+export const ContentSaldoTotal = styled.div`
+    display: flex;
+    width: 100%;
+`;
+

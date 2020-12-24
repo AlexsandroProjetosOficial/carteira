@@ -7,6 +7,8 @@ export default [
   { "description": "Salário",     "amount": "2500.25", "type": "entrada", "frequency": "recorrente", "date": "2020-03-10" }, 
   { "description": "Salário",     "amount": "2500.18", "type": "entrada", "frequency": "recorrente", "date": "2020-04-10" }, 
   { "description": "Salário",     "amount": "2500.15", "type": "entrada", "frequency": "recorrente", "date": "2020-05-10" }, 
-  { "description": "Salário",     "amount": "2500.12", "type": "entrada", "frequency": "recorrente", "date": "2021-06-10" }, 
-  { "description": "Salário",     "amount": "2500.00", "type": "entrada", "frequency": "recorrente", "date": "2019-07-10" },
-  { "description": "Salário",     "amount": "1749.99", "type": "entrada", "frequency": "recorrente", "date": "2020-07-10" }]
+  { "description": "Salário",     "amount": "2500.12", "type": "entrada", "frequency": "recorrente", "date": "2020-06-10" }, 
+  { "description": "Salário",     "amount": "2500.00", "type": "entrada", "frequency": "recorrente", "date": "2020-07-10" },
+  { "description": "Salário",     "amount": "1749.99", "type": "entrada", "frequency": "recorrente", "date": "2020-07-10" },
+  { "description": "Salário",     "amount": "640.86", "type": "entrada", "frequency": "recorrente",  "date": "2021-01-10" },
+  { "description": "Salário",     "amount": "10000.00", "type": "entrada", "frequency": "recorrente",  "date": "2030-01-10" }]
