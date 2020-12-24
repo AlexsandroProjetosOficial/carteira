@@ -1,8 +1,25 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 interface ITagProps {
     color: string;
 }
+
+const animate = keyframes`
+    
+    0% {
+        transform: translateX(-150px);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: .5;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+`;
 
 export const Container = styled.li`
     position: relative;
@@ -16,6 +33,7 @@ export const Container = styled.li`
     align-items: center;
     cursor: pointer;
     transition: all .3s;
+    animation: ${animate} .5s ease;
 
     &:hover {
         opacity: .7;

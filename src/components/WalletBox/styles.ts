@@ -16,7 +16,7 @@ const animate = keyframes`
     }
 
     100% {
-        transform: translateX(0);
+        transform: translateY(0);
         opacity: 1;
     }
 `;
