@@ -29,8 +29,8 @@ interface IData {
 
 const List: React.FC<IRouteParams> = ({ match }) => {
     const [data, setData] = useState<IData[]>([]);
-    const [monthSelected, setMonthSelected] = useState<number>(new Date().getMonth() + 1);
-    const [yearSelected, setYearSelected] = useState<number>(new Date().getFullYear());
+    const [monthSelected, setMonthSelected] = useState<number>(new Date().getUTCMonth() + 1);
+    const [yearSelected, setYearSelected] = useState<number>(new Date().getUTCFullYear());
     const [frequencyFilterSelected, setFrequencyFilterSelected] = useState(['recorrente', 'eventual']);
     const movimentType = match.params.type;
 
@@ -54,7 +54,7 @@ const List: React.FC<IRouteParams> = ({ match }) => {
 
         data.forEach(element => {
             const date = new Date(element.date);
-            const year = date.getFullYear();
+            const year = date.getUTCFullYear();
 
             if (!uniqueYears.includes(year)) {
                 uniqueYears.push(year);
@@ -112,8 +112,8 @@ const List: React.FC<IRouteParams> = ({ match }) => {
 
         const filteredDate = data.filter(item => {
             const date = new Date(item.date);
-            const month = date.getMonth() + 1;
-            const year = date.getFullYear();
+            const month = date.getUTCMonth() + 1;
+            const year = date.getUTCFullYear();
 
             return month === monthSelected && year === yearSelected && frequencyFilterSelected.includes(item.frequency);
         });

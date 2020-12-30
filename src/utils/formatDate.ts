@@ -1,8 +1,8 @@
 const formatDate = (date: string): string => {
     const dateFormatted = new Date(date);
-    const day = dateFormatted.getDate() > 9 ? dateFormatted.getDate() : `0${dateFormatted.getDate()}`;
-    const month = dateFormatted.getMonth() + 1 > 9 ? dateFormatted.getMonth() + 1 : `0${dateFormatted.getMonth() + 1}`;
-    const year = dateFormatted.getFullYear();
+    const day = dateFormatted.getUTCDate() > 9 ? dateFormatted.getUTCDate() : `0${dateFormatted.getUTCDate()}`;
+    const month = dateFormatted.getUTCMonth() + 1 > 9 ? dateFormatted.getUTCMonth() + 1 : `0${dateFormatted.getUTCMonth() + 1}`;
+    const year = dateFormatted.getUTCFullYear();
 
     return `${day}/${month}/${year}`;
 };

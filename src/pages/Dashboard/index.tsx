@@ -13,8 +13,7 @@ import grinningImg from '../../assets/grinning.svg';
 import opsImg from '../../assets/ops.svg';
 import {
     Container,
-    Content,
-    ContentSaldoTotal
+    Content
 } from './styles';
 import HistoryBox from '../../components/HistoryBox';
 import BarChartBox from '../../components/BarChartBox';
@@ -25,14 +24,14 @@ const Dashboard: React.FC = () => {
     const [monthSelected, setMonthSelected] = useState<number>(new Date().getMonth() + 1);
     const [yearSelected, setYearSelected] = useState<number>(new Date().getFullYear());
     const limite = 1000.00; // Quando tiver o banco de dados criar um useState.
-    const saldoLimite = String(`Saldo + limite: R$ ${formatCurrency(limite)}`);
+    const saldoLimite = String(`Saldo + limite: ${formatCurrency(limite)}`);
 
     const years = useMemo(() => {
         let uniqueYears: number[] = [];
 
         [...expenses, ...gains].forEach(element => {
             const date = new Date(element.date);
-            const year = date.getFullYear();
+            const year = date.getUTCFullYear();
 
             if (!uniqueYears.includes(year)) {
                 uniqueYears.push(year);
@@ -60,8 +59,8 @@ const Dashboard: React.FC = () => {
         let total: number = 0;
         expenses.forEach(element => {
             const date = new Date(element.date);
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
+            const year = date.getUTCFullYear();
+            const month = date.getUTCMonth() + 1;
 
             if (month === monthSelected && year === yearSelected) {
                 try {
@@ -79,8 +78,8 @@ const Dashboard: React.FC = () => {
         let total: number = 0;
         gains.forEach(element => {
             const date = new Date(element.date);
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
+            const year = date.getUTCFullYear();
+            const month = date.getUTCMonth() + 1;
 
             if (month === monthSelected && year === yearSelected) {
                 try {
@@ -101,7 +100,7 @@ const Dashboard: React.FC = () => {
 
             gains.forEach(gain => {
                 const date = new Date(gain.date);
-                const gainMonth = date.getMonth();
+                const gainMonth = date.getUTCMonth();
                 if (gainMonth === month) {
                     totalGainsGeral += Number(gain.amount);
                 }
@@ -109,7 +108,7 @@ const Dashboard: React.FC = () => {
 
             expenses.forEach(expense => {
                 const date = new Date(expense.date);
-                const expenseMonth = date.getMonth();
+                const expenseMonth = date.getUTCMonth();
                 if (expenseMonth === month) {
                     totalExpensesGeral += Number(expense.amount);
                 }
@@ -123,7 +122,6 @@ const Dashboard: React.FC = () => {
     const saldoDisponivelMaisLimite = useMemo(() => {
         return totalGeral + limite;
     },[totalGeral]);
-
 
     const totalBlance = useMemo(() => {
         return totalGains - totalExpenses;
@@ -191,8 +189,8 @@ const Dashboard: React.FC = () => {
                 let amountEntry = 0;
                 gains.forEach(gain => {
                     const date = new Date(gain.date);
-                    const gainMonth = date.getMonth();
-                    const gainYear = date.getFullYear();
+                    const gainMonth = date.getUTCMonth();
+                    const gainYear = date.getUTCFullYear();
 
                     if (gainMonth === month && gainYear === yearSelected) {
                         try {
@@ -206,8 +204,8 @@ const Dashboard: React.FC = () => {
                 let amountOutput = 0;
                 expenses.forEach(expense => {
                     const date = new Date(expense.date);
-                    const expenseMonth = date.getMonth();
-                    const expenseYear = date.getFullYear();
+                    const expenseMonth = date.getUTCMonth();
+                    const expenseYear = date.getUTCFullYear();
 
                     if (expenseMonth === month && expenseYear === yearSelected) {
                         try {
@@ -227,8 +225,8 @@ const Dashboard: React.FC = () => {
                 }
             })
             .filter(item => {
-                const currentMonth = new Date().getMonth();
-                const currentYear = new Date().getFullYear();
+                const currentMonth = new Date().getUTCMonth();
+                const currentYear = new Date().getUTCFullYear();
                 return (yearSelected === currentYear && item.monthNumber <= currentMonth) || (yearSelected < currentYear) || (yearSelected > currentYear)
             });
     }, [yearSelected]);
@@ -239,8 +237,8 @@ const Dashboard: React.FC = () => {
 
         expenses.filter((expense) => {
             const date = new Date(expense.date);
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
+            const year = date.getUTCFullYear();
+            const month = date.getUTCMonth() + 1;
 
             return month === monthSelected && year === yearSelected;
         }).forEach((expense) => {
@@ -281,8 +279,8 @@ const Dashboard: React.FC = () => {
 
         gains.filter((gain) => {
             const date = new Date(gain.date);
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
+            const year = date.getUTCFullYear();
+            const month = date.getUTCMonth() + 1;
 
             return month === monthSelected && year === yearSelected;
         }).forEach((gain) => {
@@ -349,15 +347,13 @@ const Dashboard: React.FC = () => {
                     onChange={(e) => handleYearSelected(e.target.value)}
                 />
             </ContentHeader>
-            <ContentSaldoTotal>
+            <Content>
                 <WalletBoxTotal
                     title="Saldo Disponível"
                     amount={saldoDisponivelMaisLimite}
                     footerlabel={saldoLimite}
                     color="#41f05e"
                 />
-            </ContentSaldoTotal>
-            <Content>
                 <WalletBox
                     title="saldo"
                     amount={totalBlance}
